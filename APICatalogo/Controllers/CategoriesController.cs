@@ -15,7 +15,7 @@ namespace APICatalogo.Controllers {
 
         [HttpGet("products")]
         public ActionResult<IEnumerable<Category>> GetCategoriesProducts() {
-            var categories = context.Categories.Include(c => c.Products).ToList();
+            var categories = context.Categories.Include(c => c.Products).AsNoTracking().ToList();
             if (categories is null) {
                 return NotFound("Categorias não encontradas");
             }
@@ -24,7 +24,7 @@ namespace APICatalogo.Controllers {
 
         [HttpGet("products/{id:int}")]
         public ActionResult<IEnumerable<Category>> GetCategoryProducts(int id) {
-            var categories = context.Categories.Include(c => c.Products).Where(c => c.Id == id).ToList();
+            var categories = context.Categories.Include(c => c.Products).Where(c => c.Id == id).AsNoTracking().ToList();
             if(categories is null) {
                 return NotFound("Categoria não encontrada");
             }
@@ -34,17 +34,17 @@ namespace APICatalogo.Controllers {
 
         [HttpGet]
         public ActionResult<IEnumerable<Category>> Get() {
-            var categories = context.Categories.ToList();
-            if (categories is null) {
-                return NotFound("Categorias não encontradas");
+            try {
+                //throw new DataMisalignedException();
+                return context.Categories.AsNoTracking().ToList();
+            } catch (Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
-
-            return categories;
         }
 
         [HttpGet("{id:int}", Name="GetCategory")]
         public ActionResult<Category> Get(int id) {
-            var category = context.Categories.FirstOrDefault(c => c.Id == id);
+            var category = context.Categories.AsNoTracking().FirstOrDefault(c => c.Id == id);
             if (category is null) {
                 return NotFound("Categoria não encontrada");
             }
