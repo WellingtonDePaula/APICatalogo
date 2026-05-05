@@ -52,8 +52,8 @@ A organização segue os padrões de separação de responsabilidades:
 1. **Clone o repositório:**
    `git clone https://github.com/seu-usuario/APICatalogo.git`
 
-2. **Configure a Connection String:**
-   Atualize o `appsettings.json` com seu banco local.
+2. **Execute o banco com Docker:**
+   Rode o comando: `docker-compose up`
 
 3. **Atualize o Banco de Dados:**
    Execute: `dotnet ef database update`

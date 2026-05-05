@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace APICatalogo.Controllers {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase {
         private readonly AppDbContext context;
@@ -21,8 +21,18 @@ namespace APICatalogo.Controllers {
             }
             return products;
         }
-        [HttpGet("{id:int}", Name = "GetProduto")]
-        public ActionResult<Product> Get(int id) {
+        [HttpGet("primeiro")]
+        [HttpGet("teste")]
+        [HttpGet("/primeiro")]
+        public ActionResult<Product> GetPrimeiro() {
+            var product = context.Products.AsNoTracking().FirstOrDefault();
+            if (product is null) {
+                return NotFound("Produto não encontrado");
+            }
+            return product;
+        }
+        [HttpGet("{id:int}/{param2=caderno}", Name = "GetProduto")]
+        public ActionResult<Product> Get(int id, string param2) {
             var product = context.Products.AsNoTracking().FirstOrDefault(p => p.Id == id);
             if (product is null) {
                 return NotFound("Produto não encontrado");

@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    container_name: local-mysql-server
+    restart: always
+    environment:
+      MYSQL_DATABASE: CatalogoDB
+      MYSQL_ROOT_PASSWORD: 123
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql        # Persists your data locally
+      - ./my-config.cnf:/etc/mysql/conf.d/config.cnf # Custom settings
+      - ./init:/docker-entrypoint-initdb.d # Runs .sql scripts on startup
